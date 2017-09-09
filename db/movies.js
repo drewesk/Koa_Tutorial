@@ -10,11 +10,16 @@ module.exports = {
   },
 
   create: (movie) => {
-    return knex('movies').insert(movie);
+    return knex('movies').insert(movie).returning('*');
   },
 
   update: (movie_id, movie) => {
-    return knex('movies').where('id, movie_id').update(movie, '*');
+    // return knex('movies').update(movie).where('id', Number(movie_id)).returning('*');
+    return knex('movies')
+      .update(movie)
+      .where({ id: parseInt(movie_id) })
+      .returning('*');
+
   },
 
   delete: (movie_id) => {
