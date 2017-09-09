@@ -8,7 +8,7 @@ chai.use(chaiHTTP);
 const server = require('../index');
 const knex = require('../connection');
 
-describe('routes : movies', () => {
+describe('routes: movies', () => {
 
   beforeEach(() => {
     return knex.migrate.rollback().then(() => {
@@ -36,7 +36,19 @@ describe('routes : movies', () => {
           done();
       });
     });
+
+    it('should throw an error if the movie doesn\'t exist', (done) => {
+      chai.request(server)
+        .get('/api/movies/12345')
+        .end((err, res) => {
+          should.exist(err);
+          res.status.should.eql(404);
+          res.type.should.eql('application/json');
+          res.body.status.should.eql('error');
+          res.body.message.should.eql('That movie doesn\'t exist.')
+          done();
+        });
+    });
+
   });
-
-
 });
