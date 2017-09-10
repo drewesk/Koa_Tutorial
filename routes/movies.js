@@ -61,7 +61,7 @@ router.post(`${API_URL}`, async (ctx) => {
     }
   } catch (err) {
     ctx.status = 404;
-    ctx.body ={
+    ctx.body = {
       status: 'error',
       message: err.message || 'Oops, something we wrong...'
     };
@@ -88,11 +88,34 @@ router.put(`${API_URL}/:id`, async (ctx) => {
     ctx.status = 404;
     ctx.body = {
       status: 'error',
-      message: err.message || 'Oops, something went wrong...'
+      message: err.message || 'Oops, something we wrong...'
     }
   }
 });
 
-
+router.delete(`${API_URL}/:id`, async (ctx) => {
+  try {
+    const movie = await Movie.delete(ctx.params.id);
+    if(movie.length) {
+      ctx.status = 200;
+      ctx.body = {
+        status: 'success',
+        data: movie
+      };
+    } else {
+      ctx.status = 404;
+      ctx.body = {
+        status: 'error',
+        message: 'That movie doesn\'t exist.'
+      };
+    }
+  } catch (err) {
+    ctx.status = 404;
+    ctx.body = {
+      status: 'error',
+      message: err.message || 'Oops, something went wrong...'
+    };
+  }
+});
 
 module.exports = router;

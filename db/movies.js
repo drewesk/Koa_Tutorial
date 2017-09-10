@@ -14,15 +14,10 @@ module.exports = {
   },
 
   update: (movie_id, movie) => {
-    // return knex('movies').update(movie).where('id', Number(movie_id)).returning('*');
-    return knex('movies')
-      .update(movie)
-      .where({ id: parseInt(movie_id) })
-      .returning('*');
-
+    return knex('movies').update(movie).where('id', movie_id).returning('*');
   },
 
   delete: (movie_id) => {
-    return knex('movie').where('id', movie_id).del();
+    return knex('movies').where('id', movie_id).del().where('id', movie_id).returning('*');
   }
 }

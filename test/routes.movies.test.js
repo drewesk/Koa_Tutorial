@@ -89,7 +89,7 @@ describe('routes: movies', () => {
     });
 
     it('Should throw an error if the movie doesn\'t exist', (done) => {
-      chai.request(server).put('/api/movies/123456789').send({rating: 9}).end((err, res) => {
+      chai.request(server).put('/api/movies/123456').send({rating: 9}).end((err, res) => {
         should.exist(err);
         res.status.should.eql(404);
         res.type.should.eql('application/json');
@@ -119,10 +119,16 @@ describe('routes: movies', () => {
       });
     });
 
-    // it('should throw an error if a movie doesn\'t exist', (done) => {
-    //   chai.request(server)
-    //     .delete('api')
-    // })
+    it('should throw an error if a movie doesn\'t exist', (done) => {
+      chai.request(server).delete('/api/movies/1234567').end((err, res) => {
+        should.exist(err);
+        res.status.should.equal(404);
+        res.type.should.equal('application/json');
+        res.body.status.should.eql('error');
+        res.body.message.should.eql('That movie doesn\'t exist.');
+        done();
+      });
+    });
   });
 
 });
